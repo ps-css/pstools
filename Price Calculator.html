@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Price Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .results {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .price-card {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .price-card h2 {
+            color: #2d3748;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-card p {
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+
+        .price-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #e53e3e;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Price Calculator</h1>
+        <div class="input-group">
+            <label for="cost">Enter Cost ($):</label>
+            <input type="number" id="cost" placeholder="0.00" step="0.01" min="0">
+            <div id="error" class="error"></div>
+        </div>
+        <button onclick="calculatePrices()">Calculate Prices</button>
+        <div class="results">
+            <div class="price-card">
+                <h2>Retail Price (50% Margin)</h2>
+                <p>Price: <span id="retailPrice" class="price-value">$0.00</span></p>
+            </div>
+            <div class="price-card">
+                <h2>Commercial Price (35% Margin)</h2>
+                <p>Price: <span id="commercialPrice" class="price-value">$0.00</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculatePrices() {
+            const costInput = document.getElementById('cost');
+            const errorDiv = document.getElementById('error');
+            const retailPriceSpan = document.getElementById('retailPrice');
+            const commercialPriceSpan = document.getElementById('commercialPrice');
+
+            // Clear previous error
+            errorDiv.textContent = '';
+
+            // Get the cost value
+            const cost = parseFloat(costInput.value);
+
+            // Validate input
+            if (isNaN(cost) || cost < 0) {
+                errorDiv.textContent = 'Please enter a valid positive number';
+                return;
+            }
+
+            // Calculate prices
+            // For 50% margin: price = cost / (1 - 0.5)
+            const retailPrice = cost / 0.5;
+            
+            // For 35% margin: price = cost / (1 - 0.35)
+            const commercialPrice = cost / 0.65;
+
+            // Display results with 2 decimal places
+            retailPriceSpan.textContent = `$${retailPrice.toFixed(2)}`;
+            commercialPriceSpan.textContent = `$${commercialPrice.toFixed(2)}`;
+        }
+
+        // Add enter key support
+        document.getElementById('cost').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculatePrices();
+            }
+        });
+    </script>
+</body>
+</html>
